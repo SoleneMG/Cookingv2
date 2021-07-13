@@ -21,7 +21,7 @@ public interface UserDao {
     @Query("DELETE FROM user")
     void delete();
 
-    @Query("SELECT * FROM user WHERE id LIKE :userId LIMIT 1")
+    @Query("SELECT * FROM user WHERE id LIKE :userId")
     User findUserById(String userId);
 
 }

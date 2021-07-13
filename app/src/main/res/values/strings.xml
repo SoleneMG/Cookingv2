@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Cookingv2</string>
+    <string name="email_edit_text">Enter your email</string>
+    <string name="password_edit_text">Enter your password</string>
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="language">Language</string>
+    <string name="refresh_button_snackbar">REFRESH</string>
+    <string name="error_message">\"Something went wrong : \"</string>
+    <string name="invalid_email">email invalid</string>
+    <string name="successful_authentication">Successful authentication</string>
+    <string name="password_testing">passwordTest</string>
+    <string name="email_test">email@test.fr</string>
+    <string-array name="language_label_spinner">
+        <item>English</item>
+        <item>French</item>
+    </string-array>
 </resources>
