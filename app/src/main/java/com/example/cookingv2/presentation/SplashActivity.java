@@ -26,12 +26,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         progressBar = findViewById(R.id.progress_bar);
+        //todo à quoi sert l'interface si tu cast en RoomImpl ?
         userDao = ((RoomImpl)DATABASE).userDao();
 
         EXECUTOR.submit(() -> {
             if(userDao.getAll().isEmpty()){
                 Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
                 startActivity(intent);
+                //todo préciser pas d'user
                 Log.d("INFO", "Database is empty");
             } else {
                 Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);

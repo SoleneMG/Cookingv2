@@ -4,6 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+todo ton model utilisé dans toute l'appli est dédié à Room =>
+ si tu dois l'envoyer ou récupérer à un serveur et que tu mets la gestion json
+ dedans ça fera un modèle fourre tout. De même si tu changes room, ça va impacter toute l'appli.
+ Faire un model RoomUser dans database.impl, que tu converti en ce modèle user neutre pour l'utiliser ensuite
+ */
+
 @Entity(tableName = "user")
 public class User {
 

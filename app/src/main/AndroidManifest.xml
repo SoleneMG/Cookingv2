@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cookingv2">
+        <!-- todo ya du jaune -->
         <activity android:name=".presentation.RegisterActivity"></activity>
         <activity android:name=".presentation.SplashActivity">
             <intent-filter>
