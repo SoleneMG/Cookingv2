@@ -9,9 +9,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Cookingv2">
-        <!-- todo ya du jaune -->
-        <activity android:name=".presentation.RegisterActivity"></activity>
+        android:theme="@style/Theme.Cookingv2"
+        android:fullBackupContent="@xml/backup_descriptor">
+        <!-- todo ya du jaune // ok-->
+        <activity android:name=".presentation.RegisterActivity" />
         <activity android:name=".presentation.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- todo le relative sert à rien, tu peux mettre le grid en parent -->
+<!-- todo le relative sert à rien, tu peux mettre le grid en parent // ok comment centrer le grid layout sans le relative ?-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
@@ -20,7 +20,7 @@ tools:context=".presentation.RegisterActivity">
         android:textSize="18sp"
         android:hint="@string/email_edit_text"
         android:inputType="textWebEmailAddress"
-        />
+        android:autofillHints="Enter your email" />
 
     <EditText
         android:id="@+id/password"
@@ -29,7 +29,8 @@ tools:context=".presentation.RegisterActivity">
         android:layout_margin="10dp"
         android:textSize="18sp"
         android:hint="@string/password_edit_text"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:autofillHints="Enter your password" />
 
 
     <Spinner
@@ -37,7 +38,8 @@ tools:context=".presentation.RegisterActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:paddingStart="5dp"/>
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"/>
 
     <Button
         android:id="@+id/register"
@@ -46,7 +48,7 @@ tools:context=".presentation.RegisterActivity">
         android:layout_margin="20dp"
         android:text="@string/register"
         android:layout_gravity="center"
-        android:onClick="Register"/>
+        android:onClick="onClickButtonRegister"/>
 
 </GridLayout>
 

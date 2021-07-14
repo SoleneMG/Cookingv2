@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class Inject {
 
-    private static final CookingDatabase DATABASE = RoomImpl.getInstance(MyApplication.getAppContext());
+    private static final CookingDatabase DATABASE = CookingDatabase.getDatabase(MyApplication.getAppContext());
     private static final int numberOfThread = 4;
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(numberOfThread);
 
