@@ -23,8 +23,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import static com.example.cookingv2.MyApplication.EXECUTOR;
-
 public class SplashActivity extends AppCompatActivity {
     private final CookingDatabase DATABASE = Inject.getDatabase();
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
@@ -56,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void getUserList(MyCallback myCallback) {
-        EXECUTOR.submit(() -> {
+        Inject.getExecutor().submit(() -> {
             if (!(DATABASE.userDao().getAll().isEmpty())) {
                 List<User> usersList = DATABASE.userDao().getAll();
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(usersList));

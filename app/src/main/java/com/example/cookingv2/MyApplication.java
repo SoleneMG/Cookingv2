@@ -8,18 +8,10 @@ import java.util.concurrent.Executors;
 
 //todo + // c'moi qui ++++++++++
 public class MyApplication extends Application {
-    private static Context context;
-    private static final int numberOfThread = 4;
-    public static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(numberOfThread);
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        Inject.init(this);
     }
-
-    public static Context getAppContext(){
-        return context;
-    }
-
 }

@@ -6,6 +6,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
+import com.example.cookingv2.Inject;
 import com.example.cookingv2.data.MyCallback;
 import com.example.cookingv2.data.server.CookingServer;
 import com.example.cookingv2.data.server.model.UserJson;
@@ -26,9 +27,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.cookingv2.MyApplication.EXECUTOR;
-
-
 public class RetrofitImpl implements CookingServer {
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
     private static final RetrofitCookingServer RETROFIT_COOKING_SERVER = retrofit.create(RetrofitCookingServer.class);
@@ -37,7 +35,7 @@ public class RetrofitImpl implements CookingServer {
 
     @Override
     public void sendPostRegister(String email, String password, String language, MyCallback myCallback) {
-        EXECUTOR.submit(() -> {
+        Inject.getExecutor().submit(() -> {
             Call<RegisterNetworkResponse> call = RETROFIT_COOKING_SERVER.postRegister(new RetrofitRegisterBodyJson(email, password, language));
             call.enqueue(new Callback<RegisterNetworkResponse>() {
                 @Override

@@ -1,5 +1,7 @@
 package com.example.cookingv2;
 
+import android.content.Context;
+
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.database.impl.RoomImpl;
 import com.example.cookingv2.data.server.CookingServer;
@@ -14,10 +16,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Inject {
 
     private static final CookingServer SERVER = new RetrofitImpl();
-    private static final CookingDatabase DATABASE = CookingDatabase.getDatabase(MyApplication.getAppContext());
+    private static CookingDatabase DATABASE;
     private static final int numberOfThread = 4;
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(numberOfThread);
 
+
+    public static void init(Context appContext){
+        DATABASE = CookingDatabase.getDatabase(appContext);
+    }
 
     public static CookingDatabase getDatabase(){return DATABASE;}
 
