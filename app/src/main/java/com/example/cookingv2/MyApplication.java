@@ -3,7 +3,7 @@ package com.example.cookingv2;
 import android.app.Application;
 import android.content.Context;
 
-//todo +
+//todo + // c'moi qui ++++++++++
 public class MyApplication extends Application {
     private static Context context;
 

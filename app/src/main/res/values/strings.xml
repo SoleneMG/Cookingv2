@@ -9,9 +9,13 @@
     <string name="error_message">\"Something went wrong : \"</string>
     <string name="invalid_email">email invalid</string>
     <string name="successful_authentication">Successful authentication</string>
-    <string name="password_testing">passwordTest</string>
-    <string name="email_test">email@test.fr</string>
     <string name="wait_during_the_chargement">Wait during the chargement</string>
+    <string name="email_test">email@test.fr</string>
+    <string name="password_test">password</string>
+    <string name="email_invalid">Email invalid</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_language">Language not supported</string>
+    <string name="user_already_exist">This email is already used by an user</string>
     <string-array name="language_label_spinner">
         <item>French</item>
         <item>English</item>
