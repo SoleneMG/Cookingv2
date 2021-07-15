@@ -15,6 +15,7 @@ import com.example.cookingv2.R;
 import com.example.cookingv2.data.MyCallback;
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.database.impl.model.RoomUser;
+import com.example.cookingv2.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -30,26 +31,34 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        getUserList(roomUsersList -> {
-            if (roomUsersList == null) {
-                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        getUserList(new MyCallback() {
+                        @Override
+                        public void onCompleteStartLoadingApplication(List<User> usersList) {
+                            if (usersList == null) {
+                                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCompleteSendPostRegister() {
+                            //Nothing
+                        }
+                    });
     }
 
     public void getUserList(MyCallback myCallback) {
         EXECUTOR.submit(() -> {
-            //todo ton getAll renvoie des RoomUser, ton modèle neutre User ne sert à rien. Faut que ton DAO renvoie des modèle user neutre sinon de même si tu changes room pour autre chose ça impactera partout où tu utilises roomuser
+            //todo ton getAll renvoie des RoomUser, ton modèle neutre User ne sert à rien. Faut que ton DAO renvoie des modèle user neutre sinon de même si tu changes room pour autre chose ça impactera partout où tu utilises roomuser // ok
             if (!(DATABASE.userDao().getAll().isEmpty())) {
-                List<RoomUser> roomUsersList = DATABASE.userDao().getAll();
-                myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(roomUsersList));
-                Log.d("INFO", "Database doesn't empty"+ roomUsersList);
+                List<User> usersList = DATABASE.userDao().getAll();
+                myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(usersList));
+                Log.d("INFO", "Database doesn't empty"+ usersList);
             } else {
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(null));
                 Log.d("INFO", "Database is empty. User doesn't register");

@@ -7,5 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 public interface MyCallback {
-    void onCompleteStartLoadingApplication(List<RoomUser> roomUsersList);
+    void onCompleteStartLoadingApplication(List<User> usersList);
+
+    void onCompleteSendPostRegister();
 }
