@@ -29,7 +29,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private Spinner spinner;
     private String language;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +76,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             case USER_ALREADY_EXIST:
                                 displaySnackBar(view).setText(R.string.user_already_exist).show();
                                 break;
-                            default :
+                            case UNEXPECTED_ERROR:
                                 displaySnackBar(view).show();
-                                throw new IllegalArgumentException("Untreated Error" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
+                                break;
+                            default :
+                                throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
                         }
                     } else {
                         User user = ((NetworkResponseSuccess<User>) networkResponse).data;
@@ -97,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private Snackbar displaySnackBar(View view) {
-        return Snackbar.make(RegisterActivity.this, view, getText(R.string.error_message), Snackbar.LENGTH_SHORT)
+        return Snackbar.make(RegisterActivity.this, view, getText(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
                 .setAction("Try again", v -> onClickButtonRegister(view))
                 .setBackgroundTint(getColor(R.color.design_default_color_primary))
                 .setTextColor(getColor(R.color.design_default_color_on_primary))

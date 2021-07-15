@@ -1,5 +1,6 @@
 package com.example.cookingv2.data.database;
 
+
 import com.example.cookingv2.model.User;
 
 import java.util.List;

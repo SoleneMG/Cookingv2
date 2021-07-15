@@ -11,19 +11,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.os.HandlerCompat;
 
 import com.example.cookingv2.Inject;
+import com.example.cookingv2.MyApplication;
 import com.example.cookingv2.R;
 import com.example.cookingv2.data.MyCallback;
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.database.impl.model.RoomUser;
+import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import static com.example.cookingv2.MyApplication.EXECUTOR;
+
 public class SplashActivity extends AppCompatActivity {
     private final CookingDatabase DATABASE = Inject.getDatabase();
-    private ExecutorService EXECUTOR = Inject.getExecutor();
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     @Override
@@ -45,10 +48,10 @@ public class SplashActivity extends AppCompatActivity {
                             }
                         }
 
-                        @Override
-                        public void onCompleteSendPostRegister() {
-                            //Nothing
-                        }
+            @Override
+            public void onCompleteSendPostRegister(NetworkResponse<User> networkResponse) {
+                // DO NOTHING
+            }
                     });
     }
 
