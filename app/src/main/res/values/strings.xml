@@ -13,7 +13,7 @@
     <string name="email_test">email@test.fr</string>
     <string name="wait_during_the_chargement">Wait during the chargement</string>
     <string-array name="language_label_spinner">
-        <item>English</item>
         <item>French</item>
+        <item>English</item>
     </string-array>
 </resources>

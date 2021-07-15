@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- todo tu fais relative + grid pour aligner des éléments centrés, tu peux utiliser juste un linear vertical pour remplacer les deux -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- todo tu fais relative + grid pour aligner des éléments centrés, tu peux utiliser juste un linear vertical pour remplacer les deux // ok yeah....-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
 tools:context=".presentation.RegisterActivity">
 
-<GridLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:orientation="vertical">
 
     <EditText
         android:id="@+id/email"
@@ -50,7 +47,6 @@ tools:context=".presentation.RegisterActivity">
         android:layout_gravity="center"
         android:onClick="onClickButtonRegister"/>
 
-</GridLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
