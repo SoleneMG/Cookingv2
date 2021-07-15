@@ -10,11 +10,5 @@ public interface CookingDatabase {
         return RoomImpl.getInstance(context);
     }
 
-    /**
-     * todo CookingDatabase est ton interface neutre, c'est à dire que tous ceux qui l'utilisent ne doivent pas savoir // ok
-     * quelle est la techno derrière. Cela permet de changer de techno facilement sans impacter tout le code.
-     * Ici tu retournes une RoomUserDao, donc une classe dédiée Room, ton interface CookingDatabase perd de son interet.
-     */
     UserDao userDao();
-
 }

@@ -54,7 +54,6 @@ public class SplashActivity extends AppCompatActivity {
 
     public void getUserList(MyCallback myCallback) {
         EXECUTOR.submit(() -> {
-            //todo ton getAll renvoie des RoomUser, ton modèle neutre User ne sert à rien. Faut que ton DAO renvoie des modèle user neutre sinon de même si tu changes room pour autre chose ça impactera partout où tu utilises roomuser // ok
             if (!(DATABASE.userDao().getAll().isEmpty())) {
                 List<User> usersList = DATABASE.userDao().getAll();
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(usersList));
