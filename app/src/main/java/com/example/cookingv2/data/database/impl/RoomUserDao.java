@@ -10,9 +10,6 @@ import com.example.cookingv2.model.User;
 
 import java.util.List;
 
-//todo si tu mets pas cette interface dans le package impl, elle devrait être indépendante de la techno // ok
-//il vaut mieux soit faire qu'un seul RoomUserDao, ou alors une interface neutre utilisée par l'impl dao room
-
 @Dao
 public interface RoomUserDao {
 

@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //todo à quoi sert l'interface si tu cast en RoomImpl ? // ok
+
         getUserList(roomUsersList -> {
             if (roomUsersList == null) {
                 Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
@@ -45,6 +45,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void getUserList(MyCallback myCallback) {
         EXECUTOR.submit(() -> {
+            //todo ton getAll renvoie des RoomUser, ton modèle neutre User ne sert à rien. Faut que ton DAO renvoie des modèle user neutre sinon de même si tu changes room pour autre chose ça impactera partout où tu utilises roomuser
             if (!(DATABASE.userDao().getAll().isEmpty())) {
                 List<RoomUser> roomUsersList = DATABASE.userDao().getAll();
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(roomUsersList));
@@ -52,7 +53,6 @@ public class SplashActivity extends AppCompatActivity {
             } else {
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(null));
                 Log.d("INFO", "Database is empty. User doesn't register");
-                //todo préciser pas d'user // ok
             }
         });
     }

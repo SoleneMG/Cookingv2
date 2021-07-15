@@ -15,7 +15,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
     }
 
-    //todo vaut mieux l'appeler du style onClickButtonRegister par exemple pour qu'on comprenne à quoi sert la méthode // ok
     public void onClickButtonRegister(View view) {
     }
 }
