@@ -1,4 +1,4 @@
-package com.example.cookingv2.presentation;
+package com.example.cookingv2.presentation.splashActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,9 @@ import androidx.core.os.HandlerCompat;
 import com.example.cookingv2.Inject;
 import com.example.cookingv2.R;
 import com.example.cookingv2.data.database.CookingDatabase;
-import com.example.cookingv2.data.database.StartLoadingCallBack;
 import com.example.cookingv2.model.User;
+import com.example.cookingv2.presentation.LoginActivity;
+import com.example.cookingv2.presentation.RegisterActivity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -34,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -43,13 +44,13 @@ public class SplashActivity extends AppCompatActivity {
 
     public void getUserList(StartLoadingCallBack callback) {
         EXECUTOR.submit(() -> {
-            if (!(DATABASE.userDao().getAll().isEmpty())) {
-                List<User> usersList = DATABASE.userDao().getAll();
+            List<User> usersList = DATABASE.userDao().getAll();
+            if (!(usersList.isEmpty())) {
                 myHandler.post(() -> callback.onCompleteStartLoadingApplication(usersList));
                 Log.d("INFO", "Database doesn't empty" + usersList);
             } else {
                 myHandler.post(() -> callback.onCompleteStartLoadingApplication(null));
-                Log.d("INFO", "Database is empty. User doesn't register");
+                Log.d("INFO", "Database is empty. No registered user");
             }
         });
     }

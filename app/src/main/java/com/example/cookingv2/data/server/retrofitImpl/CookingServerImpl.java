@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
 import com.example.cookingv2.Inject;
-import com.example.cookingv2.data.database.StartLoadingCallBack;
+import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.server.CookingServer;
 import com.example.cookingv2.data.server.RegisterSendPostCallBack;
 import com.example.cookingv2.data.server.model.UserJson;
@@ -33,15 +33,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CookingServerImpl implements CookingServer {
     //todo pourquoi des variables statiques ? // ok j'sais pas...
     private final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
-    //todo minuscule
-    private final RetrofitCookingServer RETROFIT_COOKING_SERVER = retrofit.create(RetrofitCookingServer.class);
+    //todo minuscule // ok
+    private final RetrofitCookingServer retrofitCookingServer = retrofit.create(RetrofitCookingServer.class);
+    private final CookingDatabase database = Inject.getDatabase();
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
 
     @Override
     public void sendPostRegister(String email, String password, String language, RegisterSendPostCallBack callback) {
         Inject.getExecutor().submit(() -> {
-            Call<RegisterNetworkResponse> call = RETROFIT_COOKING_SERVER.postRegister(new RetrofitRegisterBodyJson(email, password, language));
+            Call<RegisterNetworkResponse> call = retrofitCookingServer.postRegister(new RetrofitRegisterBodyJson(email, password, language));
             call.enqueue(new Callback<RegisterNetworkResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<RegisterNetworkResponse> call, @NonNull Response<RegisterNetworkResponse> response) {
@@ -49,7 +50,9 @@ public class CookingServerImpl implements CookingServer {
                     if (response.isSuccessful()) {
                         myHandler.post(() -> {
                             UserJson userJson = response.body().data;
-                            callback.onCompleteSendPostRegister(new NetworkResponseSuccess<>(new User(userJson.publicId, userJson.id, userJson.email)));
+                            User user = new User(userJson.publicId, userJson.id, userJson.email);
+                            database.userDao().insert(user);
+                            callback.onCompleteSendPostRegister(new NetworkResponseSuccess<>(user));
                         });
 
                     } else {
