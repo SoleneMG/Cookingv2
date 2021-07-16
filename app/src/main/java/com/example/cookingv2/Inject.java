@@ -4,13 +4,13 @@ import android.content.Context;
 
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.server.CookingServer;
-import com.example.cookingv2.data.server.retrofitImpl.RetrofitImpl;
+import com.example.cookingv2.data.server.retrofitImpl.CookingServerImpl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Inject {
-    private static final CookingServer SERVER = new RetrofitImpl();
+    private static final CookingServer SERVER = new CookingServerImpl();
     private static CookingDatabase DATABASE;
     private static final int numberOfThread = 4;
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(numberOfThread);
