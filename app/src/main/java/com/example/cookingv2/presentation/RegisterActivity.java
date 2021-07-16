@@ -93,6 +93,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     }
                 } else {
                     User user = ((NetworkResponseSuccess<User>) networkResponse).data;
+                    //todo tu lances une requête en async, récupère le résultat en sync, relance l'insertion en async pour continuer le changement d'activité en sync
+                    //todo il faudrait tout faire en async et avoir qu'un seul callback qui permet de revenir au thread ui
                     executor.submit(() -> database.userDao().insert(user));
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     intent.putExtra("userId", user.id);

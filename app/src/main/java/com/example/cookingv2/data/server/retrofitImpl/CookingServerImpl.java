@@ -33,6 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CookingServerImpl implements CookingServer {
     //todo pourquoi des variables statiques ? // ok j'sais pas...
     private final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
+    //todo minuscule
     private final RetrofitCookingServer RETROFIT_COOKING_SERVER = retrofit.create(RetrofitCookingServer.class);
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
