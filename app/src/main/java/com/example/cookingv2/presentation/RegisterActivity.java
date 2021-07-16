@@ -26,11 +26,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    //todo ça reste des variables pas des constantes, on écrit en minuscule
     private final ExecutorService EXECUTOR = Inject.getExecutor();
     private final CookingDatabase DATABASE = Inject.getDatabase();
     private final CookingServer server = Inject.getServer();
     private EditText email, password;
     private Spinner spinner;
+    //todo vaut mieux éviter de faire une variable pour garder la données, car dans le cas d'une rotation ou autre ça pourrait poser probleme
+    //todo tu peux faire comme l'email et mdp, tu récupère la position de l'élement selectionné du spinner et en déduire sa valeur
     private String language;
 
     @Override
@@ -41,11 +44,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         password = findViewById(R.id.password);
 
         //TESTING
+        //todo tu peux mettre des string en dur pour les tests, ça éviter de nettoyer partout ensuite
         email.setText(R.string.email_test);
         password.setText(R.string.password_test);
 
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.language_label_spinner, R.layout.spinner);
+        //todo pourquoi le spinner serait null ?
         if (spinner != null) {
             spinner.setOnItemSelectedListener(this);
             spinner.setAdapter(adapter);
@@ -55,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     public void onClickButtonRegister(View view) {
         String emailString, passwordString;
+        //todo tu peux écrire ces deux lignes sur la même au dessus
         emailString = email.getText().toString();
         passwordString = password.getText().toString();
         server.sendPostRegister(emailString, passwordString, language, new MyCallback() {

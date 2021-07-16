@@ -27,7 +27,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//todo je l'appellerais CookingServerImpl pour reprendre l'interface, retrofit c'est la techno ça inique pas quel serveur tu interroges
 public class RetrofitImpl implements CookingServer {
+    //todo pourquoi des variables statiques ?
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
     private static final RetrofitCookingServer RETROFIT_COOKING_SERVER = retrofit.create(RetrofitCookingServer.class);
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
@@ -40,6 +42,7 @@ public class RetrofitImpl implements CookingServer {
             call.enqueue(new Callback<RegisterNetworkResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<RegisterNetworkResponse> call, @NonNull Response<RegisterNetworkResponse> response) {
+                    //todo normalement le isSuccessful suffit
                     if (response.body() != null && response.errorBody() == null && response.isSuccessful()) {
                         myHandler.post(() -> {
                             UserJson userJson = response.body().data;
@@ -49,10 +52,12 @@ public class RetrofitImpl implements CookingServer {
                     } else {
                         RetrofitErrorBody retrofitErrorBody = null;
                         try {
+                            //todo du jaune
                             retrofitErrorBody = new Gson().fromJson(response.errorBody().string(), RetrofitErrorBody.class);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        //todo du jaune, et plutot que de faire le post à chaque switch, récupère ton error dans une variable et fais un post à la fin
                         switch (retrofitErrorBody.errorJson.reasonCode) {
                             case "IN001":
                                 myHandler.post(() -> myCallback.onCompleteSendPostRegister(new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_EMAIL))));
@@ -70,6 +75,7 @@ public class RetrofitImpl implements CookingServer {
                                 myHandler.post(() -> myCallback.onCompleteSendPostRegister(new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR))));
                                 break;
                             default:
+                                //todo ça pète ton app si ça throw ici ?
                                 throw new IllegalArgumentException("Error not supported" + retrofitErrorBody.errorJson.reasonCode);
 
                         }
