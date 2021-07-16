@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class SplashActivity extends AppCompatActivity {
+    private final ExecutorService EXECUTOR = Inject.getExecutor();
     private final CookingDatabase DATABASE = Inject.getDatabase();
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
@@ -54,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void getUserList(MyCallback myCallback) {
-        Inject.getExecutor().submit(() -> {
+        EXECUTOR.submit(() -> {
             if (!(DATABASE.userDao().getAll().isEmpty())) {
                 List<User> usersList = DATABASE.userDao().getAll();
                 myHandler.post(() -> myCallback.onCompleteStartLoadingApplication(usersList));

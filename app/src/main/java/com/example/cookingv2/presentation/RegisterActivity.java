@@ -1,8 +1,8 @@
 package com.example.cookingv2.presentation;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cookingv2.Inject;
 import com.example.cookingv2.R;
 import com.example.cookingv2.data.MyCallback;
+import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.server.CookingServer;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
@@ -22,9 +23,12 @@ import com.example.cookingv2.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private CookingServer server = Inject.getServer();
+    private final ExecutorService EXECUTOR = Inject.getExecutor();
+    private final CookingDatabase DATABASE = Inject.getDatabase();
+    private final CookingServer server = Inject.getServer();
     private EditText email, password;
     private Spinner spinner;
     private String language;
@@ -79,20 +83,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             case UNEXPECTED_ERROR:
                                 displaySnackBar(view).show();
                                 break;
-                            default :
+                            default:
                                 throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
                         }
                     } else {
                         User user = ((NetworkResponseSuccess<User>) networkResponse).data;
+                        EXECUTOR.submit(() -> DATABASE.userDao().insert(user));
                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         intent.putExtra("userId", user.id);
                         startActivity(intent);
                     }
                 } else {
                     displaySnackBar(view).show();
-
                 }
-
             }
         });
     }
