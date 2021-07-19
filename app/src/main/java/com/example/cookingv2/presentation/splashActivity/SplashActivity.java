@@ -14,7 +14,7 @@ import com.example.cookingv2.R;
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.model.User;
 import com.example.cookingv2.presentation.LoginActivity;
-import com.example.cookingv2.presentation.RegisterActivity;
+import com.example.cookingv2.presentation.registerActivity.RegisterActivity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

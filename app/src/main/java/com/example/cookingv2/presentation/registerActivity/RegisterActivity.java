@@ -1,4 +1,4 @@
-package com.example.cookingv2.presentation;
+package com.example.cookingv2.presentation.registerActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,17 +10,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.cookingv2.R;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseSuccess;
 import com.example.cookingv2.model.User;
-import com.example.cookingv2.viewModel.RegisterViewModel;
+import com.example.cookingv2.presentation.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private final RegisterViewModel registerViewModel = new RegisterViewModel();
+    private RegisterViewModel registerViewModel;
     private EditText email, password;
     private Spinner spinner;
 
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
@@ -58,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
                     //todo tu peux faire une méthode displaysnackbar pour séparer // ok
-                   displaySnackBar(networkResponse, view);
+                    displaySnackBar(networkResponse, view);
                 } else {
                     startLogin(networkResponse);
                     //todo de même une méthode startLogin //ok
@@ -70,14 +72,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    private void startLogin(NetworkResponse<User> networkResponse){
+    private void startLogin(NetworkResponse<User> networkResponse) {
         User user = ((NetworkResponseSuccess<User>) networkResponse).data;
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.putExtra("userId", user.id);
         startActivity(intent);
     }
 
-    private void displaySnackBar(NetworkResponse<User> networkResponse, View view){
+    private void displaySnackBar(NetworkResponse<User> networkResponse, View view) {
         switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {
             case INVALID_EMAIL:
                 makeSnackBar(view).setText(R.string.email_invalid).show();
@@ -98,6 +100,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
         }
     }
+
     private Snackbar makeSnackBar(View view) {
         return Snackbar.make(RegisterActivity.this, view, getText(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
                 .setAction("Try again", v -> onClickButtonRegister(view))

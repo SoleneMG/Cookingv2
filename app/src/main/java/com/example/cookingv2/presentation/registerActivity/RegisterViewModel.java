@@ -1,10 +1,11 @@
-package com.example.cookingv2.viewModel;
+package com.example.cookingv2.presentation.registerActivity;
 
 
 import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.ViewModel;
 
 import com.example.cookingv2.Inject;
 import com.example.cookingv2.data.database.CookingDatabase;
@@ -17,7 +18,7 @@ import com.example.cookingv2.model.User;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
-public class RegisterViewModel {
+public class RegisterViewModel extends ViewModel {
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private final CookingDatabase database = Inject.getDatabase();
     private final ExecutorService executor = Inject.getExecutor();

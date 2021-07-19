@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cookingv2">
         <activity android:name=".presentation.LoginActivity" />
-        <activity android:name=".presentation.RegisterActivity" />
+        <activity android:name=".presentation.registerActivity.RegisterActivity" />
         <activity android:name=".presentation.splashActivity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
