@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
 
-    private void onClickButtonRegister(View view) {
+    public void onClickButtonRegister(View view) {
         String emailString = email.getText().toString();
         String passwordString = password.getText().toString();
         String language;
@@ -54,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         } else {
             language = "en";
         }
-
         registerViewModel.sendPostRegister(emailString, passwordString, language, networkResponse -> {
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
