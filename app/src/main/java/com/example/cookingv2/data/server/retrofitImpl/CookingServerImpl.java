@@ -2,14 +2,13 @@ package com.example.cookingv2.data.server.retrofitImpl;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
 import com.example.cookingv2.Inject;
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.server.CookingServer;
-import com.example.cookingv2.data.server.RegisterSendPostCallBack;
 import com.example.cookingv2.data.server.model.UserJson;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
@@ -24,7 +23,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -35,69 +33,42 @@ public class CookingServerImpl implements CookingServer {
     private final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
     //todo minuscule // ok
     private final RetrofitCookingServer retrofitCookingServer = retrofit.create(RetrofitCookingServer.class);
-    private final CookingDatabase database = Inject.getDatabase();
-    private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+
+
 
 
     @Override
-    public void sendPostRegister(String email, String password, String language, RegisterSendPostCallBack callback) {
-        Inject.getExecutor().submit(() -> {
-            Call<RegisterNetworkResponse> call = retrofitCookingServer.postRegister(new RetrofitRegisterBodyJson(email, password, language));
-            call.enqueue(new Callback<RegisterNetworkResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<RegisterNetworkResponse> call, @NonNull Response<RegisterNetworkResponse> response) {
-                    //todo normalement le isSuccessful suffit // ok
-                    if (response.isSuccessful()) {
-                        myHandler.post(() -> {
-                            UserJson userJson = response.body().data;
-                            User user = new User(userJson.publicId, userJson.id, userJson.email);
-                            database.userDao().insert(user);
-                            callback.onCompleteSendPostRegister(new NetworkResponseSuccess<>(user));
-                        });
-
-                    } else {
-                        RetrofitErrorBody retrofitErrorBody = null;
-                        try {
-                            //todo du jaune // ok moi j'en ai pas Oo
-                            retrofitErrorBody = new Gson().fromJson(response.errorBody().string(), RetrofitErrorBody.class);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        //todo du jaune, et plutot que de faire le post à chaque switch, récupère ton error dans une variable et fais un post à la fin // ok pas bête ma belette
-                        NetworkResponse<User> networkResponse;
-                        switch (retrofitErrorBody.errorJson.reasonCode) {
-                            case "IN001":
-                                networkResponse = new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_EMAIL));
-                                break;
-                            case "IN002":
-                                networkResponse = new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_PASSWORD));
-                                break;
-                            case "IN003":
-                                networkResponse = new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_LANGUAGE));
-                                break;
-                            case "US001":
-                                networkResponse = new NetworkResponseFailure<>(new Error(Error.RegisterError.USER_ALREADY_EXIST));
-                                break;
-                            case "AP001":
-                                networkResponse = new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR));
-                                break;
-                            default:
-                                //todo ça pète ton app si ça throw ici ? // ok je sais pas je peux pas tester le cas, si?
-                                throw new IllegalArgumentException("Error not supported" + retrofitErrorBody.errorJson.reasonCode);
-                        }
-                        if(networkResponse !=null){
-                            myHandler.post(() -> callback.onCompleteSendPostRegister(networkResponse));
-                        }
-
-                    }
+    public NetworkResponse<User> sendPostRegister(String email, String password, String language) throws IOException {
+        Call<RegisterNetworkResponse> call = retrofitCookingServer.postRegister(new RetrofitRegisterBodyJson(email, password, language));
+        Response<RegisterNetworkResponse> response = call.execute();
+        if (response.isSuccessful()) {
+            UserJson userJson = response.body().data;
+            User user = new User(userJson.publicId, userJson.id, userJson.email);
+            return new NetworkResponseSuccess<>(user);
+        } else {
+            RetrofitErrorBody retrofitErrorBody;
+            try {
+                retrofitErrorBody = new Gson().fromJson(response.errorBody().string(), RetrofitErrorBody.class);
+                switch (retrofitErrorBody.errorJson.reasonCode) {
+                    case "IN001":
+                        return new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_EMAIL));
+                    case "IN002":
+                        return new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_PASSWORD));
+                    case "IN003":
+                        return new NetworkResponseFailure<>(new Error(Error.RegisterError.INVALID_LANGUAGE));
+                    case "US001":
+                        return new NetworkResponseFailure<>(new Error(Error.RegisterError.USER_ALREADY_EXIST));
+                    case "AP001":
+                        return new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR));
+                    default:
+                        //todo ça pète ton app si ça throw ici ? // ok je sais pas je peux pas tester le cas, si?
+                        throw new IllegalArgumentException("Error not supported" + retrofitErrorBody.errorJson.reasonCode);
                 }
+            } catch (IOException e) {
+                Log.d("DEBUG", "Network error "+ e);
+                return new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR));
 
-                @Override
-                public void onFailure(@NonNull Call<RegisterNetworkResponse> call, @NonNull Throwable t) {
-                    myHandler.post(() -> callback.onCompleteSendPostRegister(new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR))));
-
-                }
-            });
-        });
+            }
+        }
     }
 }

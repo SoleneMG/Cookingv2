@@ -17,11 +17,12 @@ import com.example.cookingv2.data.server.CookingServer;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseSuccess;
 import com.example.cookingv2.model.User;
+import com.example.cookingv2.viewModel.RegisterViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     //todo ça reste des variables pas des constantes, on écrit en minuscule // ok
-    private final CookingServer server = Inject.getServer();
+    private final RegisterViewModel registerViewModel = new RegisterViewModel();
     private EditText email, password;
     private Spinner spinner;
     //todo vaut mieux éviter de faire une variable pour garder la données, car dans le cas d'une rotation ou autre ça pourrait poser probleme
@@ -60,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             language = "en";
         }
 
-        server.sendPostRegister(emailString, passwordString, language, networkResponse -> {
+        registerViewModel.sendPostRegister(emailString, passwordString, language, networkResponse -> {
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
                     switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {

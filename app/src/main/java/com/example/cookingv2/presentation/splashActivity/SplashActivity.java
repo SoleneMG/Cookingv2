@@ -20,14 +20,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class SplashActivity extends AppCompatActivity {
-    private final ExecutorService EXECUTOR = Inject.getExecutor();
-    private final CookingDatabase DATABASE = Inject.getDatabase();
+    private final ExecutorService executor = Inject.getExecutor();
+    private final CookingDatabase database = Inject.getDatabase();
     private final Handler myHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+       // executor.submit(() -> database.userDao().deleteAll());
 
         getUserList(usersList -> {
             if (usersList == null) {
@@ -43,8 +44,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void getUserList(StartLoadingCallBack callback) {
-        EXECUTOR.submit(() -> {
-            List<User> usersList = DATABASE.userDao().getAll();
+        executor.submit(() -> {
+            List<User> usersList = database.userDao().getAll();
             if (!(usersList.isEmpty())) {
                 myHandler.post(() -> callback.onCompleteStartLoadingApplication(usersList));
                 Log.d("INFO", "Database doesn't empty" + usersList);
