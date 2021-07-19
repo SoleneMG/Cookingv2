@@ -1,13 +1,7 @@
 package com.example.cookingv2.data.server.retrofitImpl;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
-import androidx.core.os.HandlerCompat;
-
-import com.example.cookingv2.Inject;
-import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.data.server.CookingServer;
 import com.example.cookingv2.data.server.model.UserJson;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
@@ -55,11 +49,10 @@ public class CookingServerImpl implements CookingServer {
                     case "AP001":
                         return new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR));
                     default:
-                        //todo ça pète ton app si ça throw ici ? // ok je sais pas je peux pas tester le cas, si?
                         throw new IllegalArgumentException("Error not supported" + retrofitErrorBody.errorJson.reasonCode);
                 }
             } catch (IOException e) {
-                Log.d("DEBUG", "Network error "+ e);
+                Log.d("DEBUG", "Network error " + e);
                 return new NetworkResponseFailure<>(new Error(Error.RegisterError.UNEXPECTED_ERROR));
 
             }

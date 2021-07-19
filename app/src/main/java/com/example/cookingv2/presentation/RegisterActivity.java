@@ -11,9 +11,8 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cookingv2.Inject;
 import com.example.cookingv2.R;
-import com.example.cookingv2.data.server.CookingServer;
+import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseSuccess;
 import com.example.cookingv2.model.User;
@@ -45,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
 
-    public void onClickButtonRegister(View view) {
+    private void onClickButtonRegister(View view) {
         String emailString = email.getText().toString();
         String passwordString = password.getText().toString();
         String language;
@@ -59,40 +58,48 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         registerViewModel.sendPostRegister(emailString, passwordString, language, networkResponse -> {
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
-                    //todo tu peux faire une méthode displaysnackbar pour séparer
-                    switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {
-                        case INVALID_EMAIL:
-                            displaySnackBar(view).setText(R.string.email_invalid).show();
-                            break;
-                        case INVALID_PASSWORD:
-                            displaySnackBar(view).setText(R.string.invalid_password).show();
-                            break;
-                        case INVALID_LANGUAGE:
-                            displaySnackBar(view).setText(R.string.invalid_language).show();
-                            break;
-                        case USER_ALREADY_EXIST:
-                            displaySnackBar(view).setText(R.string.user_already_exist).show();
-                            break;
-                        case UNEXPECTED_ERROR:
-                            displaySnackBar(view).show();
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
-                    }
+                    //todo tu peux faire une méthode displaysnackbar pour séparer // ok
+                   displaySnackBar(networkResponse, view);
                 } else {
-                    //todo de même une méthode startLogin
-                    User user = ((NetworkResponseSuccess<User>) networkResponse).data;
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    intent.putExtra("userId", user.id);
-                    startActivity(intent);
+                    startLogin(networkResponse);
+                    //todo de même une méthode startLogin //ok
+
                 }
             } else {
-                displaySnackBar(view).show();
+                makeSnackBar(view).show();
             }
         });
     }
 
-    private Snackbar displaySnackBar(View view) {
+    private void startLogin(NetworkResponse<User> networkResponse){
+        User user = ((NetworkResponseSuccess<User>) networkResponse).data;
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        intent.putExtra("userId", user.id);
+        startActivity(intent);
+    }
+
+    private void displaySnackBar(NetworkResponse<User> networkResponse, View view){
+        switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {
+            case INVALID_EMAIL:
+                makeSnackBar(view).setText(R.string.email_invalid).show();
+                break;
+            case INVALID_PASSWORD:
+                makeSnackBar(view).setText(R.string.invalid_password).show();
+                break;
+            case INVALID_LANGUAGE:
+                makeSnackBar(view).setText(R.string.invalid_language).show();
+                break;
+            case USER_ALREADY_EXIST:
+                makeSnackBar(view).setText(R.string.user_already_exist).show();
+                break;
+            case UNEXPECTED_ERROR:
+                makeSnackBar(view).show();
+                break;
+            default:
+                throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
+        }
+    }
+    private Snackbar makeSnackBar(View view) {
         return Snackbar.make(RegisterActivity.this, view, getText(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
                 .setAction("Try again", v -> onClickButtonRegister(view))
                 .setBackgroundTint(getColor(R.color.design_default_color_primary))

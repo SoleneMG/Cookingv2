@@ -30,9 +30,8 @@ public class RegisterViewModel {
                 if(networkResponse instanceof NetworkResponseSuccess){
                     User user = ((NetworkResponseSuccess<User>) networkResponse).data;
                     database.userDao().insert(user);
-                    myHandler.post(() -> callback.onCompleteSendPostRegister(networkResponse));
                 }
-                //todo t'appelles deux fois ton callback ?
+                //todo t'appelles deux fois ton callback ? // ok j'avais mis un else que j'ai supprimé d'où le doublon pardon j'ai pas fait de relecture T_T
                 myHandler.post(() -> callback.onCompleteSendPostRegister(networkResponse));
             } catch (IOException e) {
                 e.printStackTrace();
