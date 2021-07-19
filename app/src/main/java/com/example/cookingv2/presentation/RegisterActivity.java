@@ -21,12 +21,9 @@ import com.example.cookingv2.viewModel.RegisterViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    //todo ça reste des variables pas des constantes, on écrit en minuscule // ok
     private final RegisterViewModel registerViewModel = new RegisterViewModel();
     private EditText email, password;
     private Spinner spinner;
-    //todo vaut mieux éviter de faire une variable pour garder la données, car dans le cas d'une rotation ou autre ça pourrait poser probleme
-    //todo tu peux faire comme l'email et mdp, tu récupère la position de l'élement selectionné du spinner et en déduire sa valeur // ok pas sûre que j'ai corrigé comme tu voulais
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -37,20 +34,18 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         password = findViewById(R.id.password);
 
         //TESTING
-        //todo tu peux mettre des string en dur pour les tests, ça éviter de nettoyer partout ensuite // ok mais y'a du jaune après tu vas me taper
         email.setText("email@test.fr");
         password.setText("password");
 
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.language_label_spinner, R.layout.spinner);
-        //todo pourquoi le spinner serait null ? // ok
+
         spinner.setOnItemSelectedListener(this);
         spinner.setAdapter(adapter);
     }
 
 
     public void onClickButtonRegister(View view) {
-        //todo tu peux écrire ces deux lignes sur la même au dessus // ok
         String emailString = email.getText().toString();
         String passwordString = password.getText().toString();
         String language;
@@ -64,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         registerViewModel.sendPostRegister(emailString, passwordString, language, networkResponse -> {
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
+                    //todo tu peux faire une méthode displaysnackbar pour séparer
                     switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {
                         case INVALID_EMAIL:
                             displaySnackBar(view).setText(R.string.email_invalid).show();
@@ -84,9 +80,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
                     }
                 } else {
+                    //todo de même une méthode startLogin
                     User user = ((NetworkResponseSuccess<User>) networkResponse).data;
-                    //todo tu lances une requête en async, récupère le résultat en sync, relance l'insertion en async pour continuer le changement d'activité en sync
-                    //todo il faudrait tout faire en async et avoir qu'un seul callback qui permet de revenir au thread ui // ok fait dans le server
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     intent.putExtra("userId", user.id);
                     startActivity(intent);

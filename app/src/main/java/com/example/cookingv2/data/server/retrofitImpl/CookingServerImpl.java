@@ -27,15 +27,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//todo je l'appellerais CookingServerImpl pour reprendre l'interface, retrofit c'est la techno ça inique pas quel serveur tu interroges // ok
 public class CookingServerImpl implements CookingServer {
-    //todo pourquoi des variables statiques ? // ok j'sais pas...
     private final Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.17:8080/").addConverterFactory(GsonConverterFactory.create()).build();
-    //todo minuscule // ok
     private final RetrofitCookingServer retrofitCookingServer = retrofit.create(RetrofitCookingServer.class);
-
-
-
 
     @Override
     public NetworkResponse<User> sendPostRegister(String email, String password, String language) throws IOException {

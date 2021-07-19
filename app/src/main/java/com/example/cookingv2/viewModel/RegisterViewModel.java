@@ -32,6 +32,7 @@ public class RegisterViewModel {
                     database.userDao().insert(user);
                     myHandler.post(() -> callback.onCompleteSendPostRegister(networkResponse));
                 }
+                //todo t'appelles deux fois ton callback ?
                 myHandler.post(() -> callback.onCompleteSendPostRegister(networkResponse));
             } catch (IOException e) {
                 e.printStackTrace();
