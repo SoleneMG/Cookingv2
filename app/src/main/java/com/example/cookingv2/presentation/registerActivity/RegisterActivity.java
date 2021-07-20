@@ -16,6 +16,7 @@ import com.example.cookingv2.R;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseSuccess;
+import com.example.cookingv2.model.Error;
 import com.example.cookingv2.model.User;
 import com.example.cookingv2.presentation.loginActivity.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -60,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             if (networkResponse != null) {
                 if (networkResponse instanceof NetworkResponseFailure) {
                     //todo tu peux faire une méthode displaysnackbar pour séparer // ok
-                    displaySnackBar(networkResponse, view);
+                    displayErrorSnackBar(networkResponse, view);
                 } else {
                     startLogin(networkResponse);
                     //todo de même une méthode startLogin //ok
@@ -72,15 +73,15 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    private void startLogin(NetworkResponse<User> networkResponse) {
-        User user = ((NetworkResponseSuccess<User>) networkResponse).data;
+    private void startLogin(NetworkResponse<User, Error.RegisterError> networkResponse) {
+        User user = ((NetworkResponseSuccess<User, Error.RegisterError>) networkResponse).data;
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.putExtra("userId", user.id);
         startActivity(intent);
     }
 
-    private void displaySnackBar(NetworkResponse<User> networkResponse, View view) {
-        switch (((NetworkResponseFailure<User>) networkResponse).error.registerError) {
+    private void displayErrorSnackBar(NetworkResponse<User, Error.RegisterError> networkResponse, View view) {
+        switch (((NetworkResponseFailure<User, Error.RegisterError>) networkResponse).error) {
             case INVALID_EMAIL:
                 makeSnackBar(view).setText(R.string.email_invalid).show();
                 break;
@@ -97,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 makeSnackBar(view).show();
                 break;
             default:
-                throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User>) networkResponse).error.registerError);
+                throw new IllegalArgumentException("Untreated Error :" + ((NetworkResponseFailure<User, Error.RegisterError>) networkResponse).error);
         }
     }
 

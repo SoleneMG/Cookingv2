@@ -16,6 +16,8 @@
     <string name="invalid_language">Language not supported</string>
     <string name="user_already_exist">This email is already used by an user</string>
     <string name="login">LOGIN</string>
+    <string name="password_not_match">Mot de passe incorrect</string>
+    <string name="user_not_found">Email invalide</string>
     <string-array name="language_label_spinner">
         <item>French</item>
         <item>English</item>

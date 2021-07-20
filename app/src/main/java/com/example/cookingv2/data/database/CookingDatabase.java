@@ -2,6 +2,9 @@ package com.example.cookingv2.data.database;
 
 import android.content.Context;
 
+
+import com.example.cookingv2.data.database.dao.TokenDao;
+import com.example.cookingv2.data.database.dao.UserDao;
 import com.example.cookingv2.data.database.impl.RoomImpl;
 
 public interface CookingDatabase {
@@ -11,4 +14,6 @@ public interface CookingDatabase {
     }
 
     UserDao userDao();
+
+    TokenDao tokenDao();
 }

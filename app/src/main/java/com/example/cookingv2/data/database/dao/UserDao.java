@@ -1,4 +1,4 @@
-package com.example.cookingv2.data.database;
+package com.example.cookingv2.data.database.dao;
 
 
 import com.example.cookingv2.model.User;
@@ -14,4 +14,7 @@ public interface UserDao {
     void deleteAll();
 
     User findUserById(String id);
+
+    User findUserByEmail(String email);
+
 }

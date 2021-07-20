@@ -4,9 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Room;
 
-import com.example.cookingv2.data.database.UserDao;
+import com.example.cookingv2.data.database.dao.UserDao;
 import com.example.cookingv2.data.database.impl.model.RoomUser;
 import com.example.cookingv2.model.User;
 
@@ -27,6 +26,9 @@ public abstract class RoomUserDao implements UserDao {
 
     @Query("SELECT * FROM user WHERE id LIKE :userId")
     abstract RoomUser roomfindUserById(String userId);
+
+    @Query("SELECT * FROM user WHERE email LIKE :email LIMIT 1")
+    abstract RoomUser roomFindUserWithEmail(String email);
 
     @Override
     public void insert(User user) {
@@ -53,6 +55,13 @@ public abstract class RoomUserDao implements UserDao {
     @Override
     public User findUserById(String id) {
         RoomUser roomUser = roomfindUserById(id);
+        return new User(roomUser.publicId, roomUser.id, roomUser.email);
+    }
+
+
+    @Override
+    public User findUserByEmail(String email) {
+        RoomUser roomUser = roomFindUserWithEmail(email);
         return new User(roomUser.publicId, roomUser.id, roomUser.email);
     }
 }
