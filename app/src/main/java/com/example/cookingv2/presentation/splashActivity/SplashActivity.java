@@ -13,7 +13,7 @@ import com.example.cookingv2.Inject;
 import com.example.cookingv2.R;
 import com.example.cookingv2.data.database.CookingDatabase;
 import com.example.cookingv2.model.User;
-import com.example.cookingv2.presentation.LoginActivity;
+import com.example.cookingv2.presentation.loginActivity.LoginActivity;
 import com.example.cookingv2.presentation.registerActivity.RegisterActivity;
 
 import java.util.List;

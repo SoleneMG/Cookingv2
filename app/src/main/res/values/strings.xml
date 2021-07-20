@@ -2,7 +2,6 @@
     <string name="app_name">Cookingv2</string>
     <string name="email_edit_text">Enter your email</string>
     <string name="password_edit_text">Enter your password</string>
-    <string name="login">LOGIN</string>
     <string name="register">REGISTER</string>
     <string name="language">Language</string>
     <string name="refresh_button_snackbar">REFRESH</string>
@@ -16,6 +15,7 @@
     <string name="invalid_password">Invalid password</string>
     <string name="invalid_language">Language not supported</string>
     <string name="user_already_exist">This email is already used by an user</string>
+    <string name="login">LOGIN</string>
     <string-array name="language_label_spinner">
         <item>French</item>
         <item>English</item>

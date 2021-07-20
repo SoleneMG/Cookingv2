@@ -17,7 +17,7 @@ import com.example.cookingv2.data.server.model.networkResponse.NetworkResponse;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFailure;
 import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseSuccess;
 import com.example.cookingv2.model.User;
-import com.example.cookingv2.presentation.LoginActivity;
+import com.example.cookingv2.presentation.loginActivity.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
