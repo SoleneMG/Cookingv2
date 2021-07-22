@@ -2,6 +2,7 @@ package com.example.cookingv2.presentation.loginActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import com.example.cookingv2.data.server.model.networkResponse.NetworkResponseFa
 import com.example.cookingv2.model.Error;
 import com.example.cookingv2.model.Token;
 import com.google.android.material.snackbar.Snackbar;
+
+import static com.example.cookingv2.presentation.registerActivity.RegisterActivity.EXTRA_MESSAGE_REGISTER_ACTIVITY;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginActitivyViewModel viewModel;
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void fillEmailField() {
         Intent intent = getIntent();
-        @SuppressWarnings("JavacQuirks") String userId = intent.getParcelableExtra("userId");
+        String userId = intent.getStringExtra(EXTRA_MESSAGE_REGISTER_ACTIVITY);
         viewModel.searchUserById(userId, user -> email.setText(user.email));
     }
 

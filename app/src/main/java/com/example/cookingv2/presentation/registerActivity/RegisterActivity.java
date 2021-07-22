@@ -22,6 +22,7 @@ import com.example.cookingv2.presentation.loginActivity.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    public static String EXTRA_MESSAGE_REGISTER_ACTIVITY = "RegisterActivity.class";
     private RegisterViewModel registerViewModel;
     private EditText email, password;
     private Spinner spinner;
@@ -76,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private void startLogin(NetworkResponse<User, Error.RegisterError> networkResponse) {
         User user = ((NetworkResponseSuccess<User, Error.RegisterError>) networkResponse).data;
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        intent.putExtra("userId", user.id);
+        intent.putExtra(EXTRA_MESSAGE_REGISTER_ACTIVITY, user.id);
         startActivity(intent);
     }
 
